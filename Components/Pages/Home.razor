@@ -1,0 +1,59 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button @onclick="FetchToDoData">Get To Do Data</button>
+
+@if (todo != null)
+{
+    <h3>Title: @todo.title</h3>
+    <p>Completed: @todo.completed</p>
+}
+
+<button @onclick="FetchPokemonData">Get Pokemon Data</button>
+
+@if (pokemon != null)
+{
+    <h3>Name: @pokemon.name</h3>
+    <p>Height: @pokemon.height</p>
+    <p>Weight: @pokemon.weight</p>
+}
+
+
+@code {
+
+    public Todo todo;
+    public Pokemon pokemon;
+
+    public HttpClient httpClient = new HttpClient();
+
+    public async Task FetchToDoData()
+    {
+        todo = await httpClient.GetFromJsonAsync<Todo>("https://jsonplaceholder.typicode.com/todos/1");    
+    }
+    public async Task FetchPokemonData()
+    {
+        pokemon = await httpClient.GetFromJsonAsync<Pokemon>("https://pokeapi.co/api/v2/pokemon/pikachu");    
+    }
+
+    public class Todo
+    {
+        public int userId {get; set; }
+        public int id {get; set;}
+        public string title {get; set;}
+        public bool completed {get; set;}
+    }
+
+       public class Pokemon
+    {
+        public int id {get; set;}
+        public string name {get; set;}
+        public int weight {get; set;}
+        public int height {get; set;}
+    }
+}   
